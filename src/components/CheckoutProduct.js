@@ -1,27 +1,26 @@
-import { useState } from "react";
-import Image from "next/image";
-import { StarIcon } from '@heroicons/react/solid';
-import Currency from 'react-currency-formatter';
-import Fade from 'react-reveal/Fade';
+import { StarIcon } from "@heroicons/react/solid";
 import { useDispatch } from 'react-redux';
-import { addToBasket } from "../slices/basketSlice";
+import Image from "next/image";
+import Currency from 'react-currency-formatter';
+import { addToBasket, removeFromBasket } from "../slices/basketSlice";
 
 const MAX_RATING = 5;
 const MIN_RATING = 1;
-const Product = ({ id, title, price, description, category, image }) => {
-    const dispatch = useDispatch()
-    const [rating] = useState(Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1) + MIN_RATING))
-    const [hasPrime] = useState(Math.random() < 0.5);
-
+const CheckoutProduct = ({ id, title, price, rating, description, category, image, hasPrime }) => {
+    const dispatch = useDispatch();
     const addItemsToBasket = () => {
         const product = { id, title, price, rating, description, category, image, hasPrime };
+        // push the items into store 
         dispatch(addToBasket(product))
     }
-
+    const removeItemsFromBasket = () => {
+        //remove the items from redux
+        dispatch(removeFromBasket({ id }))
+    }
     return (
-        <Fade bottom>
-            <div className="relative flex flex-col m-5 bg-white p-10 z-30 rounded-xl">
-                <p className="absolute top-2 right-2 text-xs italic text-gray-400">{category}</p>
+        <div className="grid grid-cols-5">
+            {/* Left side */}
+            <div>
                 <Image
                     className="cursor-pointer rounded-lg"
                     src={image}
@@ -29,6 +28,10 @@ const Product = ({ id, title, price, description, category, image }) => {
                     height={200}
                     objectFit="contain"
                 />
+            </div>
+
+            {/* Middle side */}
+            <div className="col-span-3 mx-5">
                 <h1 className="my-3">{title}</h1>
                 <div className="flex">
                     {Array(rating).fill()
@@ -50,10 +53,15 @@ const Product = ({ id, title, price, description, category, image }) => {
                         <p className="text-xs text-gray-500">FREE Next-day Delivery</p>
                     </div>
                 )}
-                <button onClick={addItemsToBasket} className="button">Add to Basket</button>
             </div>
-        </Fade>
+
+            {/* Right side add/remove button */}
+            <div className="flex flex-col space-y-2 my-auto justify-self-end">
+                <div className="button" onClick={addItemsToBasket}>Add to Basket</div>
+                <div className="button" onClick={removeItemsFromBasket}>Remove from Basket</div>
+            </div>
+        </div>
     )
 }
 
-export default Product
+export default CheckoutProduct
