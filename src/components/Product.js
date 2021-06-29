@@ -5,6 +5,8 @@ import Currency from 'react-currency-formatter';
 import Fade from 'react-reveal/Fade';
 import { useDispatch } from 'react-redux';
 import { addToBasket } from "../slices/basketSlice";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const MAX_RATING = 5;
 const MIN_RATING = 1;
@@ -15,7 +17,8 @@ const Product = ({ id, title, price, description, category, image }) => {
 
     const addItemsToBasket = () => {
         const product = { id, title, price, rating, description, category, image, hasPrime };
-        dispatch(addToBasket(product))
+        dispatch(addToBasket(product));
+        toast(`${title} added into basket.`, { closeOnClick: true, autoClose: 3000 });
     }
 
     return (
@@ -51,6 +54,10 @@ const Product = ({ id, title, price, description, category, image }) => {
                     </div>
                 )}
                 <button onClick={addItemsToBasket} className="button">Add to Basket</button>
+                <ToastContainer
+                    autoClose={3000}
+                    closeOnClick
+                />
             </div>
         </Fade>
     )
