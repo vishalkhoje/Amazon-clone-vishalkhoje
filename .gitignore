@@ -36,3 +36,4 @@ yarn-error.log*
 #git
 yarn.lock
 package.json.lock
+yarn-error.log

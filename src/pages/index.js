@@ -4,6 +4,8 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Productfeed from "../components/Productfeed";
 import { getSession } from "next-auth/client";
+// import LogRocket from 'logrocket';
+// LogRocket.init('hz8dvu/amazon-2');
 
 export default function Home({ products }) {
 
