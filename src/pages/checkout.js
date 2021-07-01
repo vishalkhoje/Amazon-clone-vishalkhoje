@@ -17,15 +17,19 @@ const Checkout = () => {
     // call the backend to create checkout session
     const createCheckoutSession = async () => {
         const stripe = await stripePromise;
-        const checkoutSession = await axios.post('/api/create-checkout-session',
-            {
-                items: selectedItem,
-                email: session.user.email
+        try {
+            const checkoutSession = await axios.post('/api/create-checkout-session',
+                {
+                    items: selectedItem,
+                    email: session.user.email
+                });
+            // redirect to user/customer to strip checkout 
+            const result = await stripe.redirectToCheckout({
+                sessionId: checkoutSession.data.id
             });
-        // redirect to user/customer to strip checkout 
-        const result = await stripe.redirectToCheckout({
-            sessionId: checkoutSession.data.id
-        })
+        } catch (error) {
+            console.error(error);
+        }
 
         if (result.error) alert(result.error.message)
     }
