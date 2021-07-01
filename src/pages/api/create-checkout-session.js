@@ -26,14 +26,14 @@ export default async (req, res) => {
             line_items: transformedItem,
             mode: 'payment',
             success_url: `${process.env.HOST}/success`,
-            cancel_url: `${process.env.HOST}/failed`,
+            cancel_url: `${process.env.HOST}/checkout`,
             metadata: {
                 email,
                 images: JSON.stringify(items.map(item => item.image)),
                 titles: JSON.stringify(items.map(item => item.title))
             }
         });
-        console.log(session);
+        console.log("session:", session);
         res.status(200).json({ id: session.id })
     } catch (error) {
         console.error(error);
