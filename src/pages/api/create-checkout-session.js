@@ -33,7 +33,7 @@ export default async (req, res) => {
                 titles: JSON.stringify(items.map(item => item.title))
             }
         });
-        console.log("session:", session);
+
         res.status(200).json({ id: session.id })
     } catch (error) {
         console.error(error);

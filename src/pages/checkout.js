@@ -21,7 +21,7 @@ const Checkout = () => {
             const checkoutSession = await axios.post('/api/create-checkout-session',
                 {
                     items: selectedItem,
-                    email: 'vishtest@gmail.com'
+                    email: session.user.email
                 });
             // redirect to user/customer to strip checkout 
             const result = await stripe.redirectToCheckout({
@@ -31,7 +31,6 @@ const Checkout = () => {
         } catch (error) {
             console.error(error);
         }
-
 
     }
 
@@ -66,11 +65,9 @@ const Checkout = () => {
                             <button
                                 role="link"
                                 onClick={createCheckoutSession}
-                                // disabled={!session}
-                                // className={`button mt-2 ${!session && "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"}`}>
-                                // {session ? "Proceed to checkout" : "Sign to checkout"}
-                                className={`button mt-2 `}>
-                                {"Sign to checkout"}
+                                disabled={!session}
+                                className={`button mt-2 ${!session && "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"}`}>
+                                {session ? "Proceed to checkout" : "Sign to checkout"}
                             </button>
                         </>
                     )
