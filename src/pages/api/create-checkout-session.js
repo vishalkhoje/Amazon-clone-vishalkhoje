@@ -25,8 +25,8 @@ export default async (req, res) => {
             },
             line_items: transformedItem,
             mode: 'payment',
-            success_url: `${process.env.HOST}/success`,
-            cancel_url: `${process.env.HOST}/checkout`,
+            success_url: `${process.env.HOST ? process.env.HOST : 'https://amazon-2-vishalkhoje-90um2r2tj-vishalkhoje.vercel.app'}/success`,
+            cancel_url: `${process.env.HOST ? process.env.HOST : 'https://amazon-2-vishalkhoje-90um2r2tj-vishalkhoje.vercel.app'}/checkout`,
             metadata: {
                 email,
                 images: JSON.stringify(items.map(item => item.image)),
