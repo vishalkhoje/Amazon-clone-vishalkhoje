@@ -1,18 +1,22 @@
 import { StarIcon } from "@heroicons/react/solid";
+import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import Image from "next/image";
 import Currency from 'react-currency-formatter';
+import QuantityCount from "./QuantityCount";
 import { addToBasket, removeFromBasket } from "../slices/basketSlice";
 
 const MAX_RATING = 5;
 const MIN_RATING = 1;
 const CheckoutProduct = ({ id, title, price, rating, description, category, image, hasPrime }) => {
     const dispatch = useDispatch();
-    const addItemsToBasket = () => {
-        const product = { id, title, price, rating, description, category, image, hasPrime };
-        // push the items into store 
-        dispatch(addToBasket(product))
-    }
+    const [quantity, setQuantity] = useState(quantity);
+
+    // const addItemsToBasket = () => {
+    //     const product = { id, title, price, rating, description, category, image, hasPrime };
+    //     // push the items into store 
+    //     dispatch(addToBasket(product))
+    // }
     const removeItemsFromBasket = () => {
         //remove the items from redux
         dispatch(removeFromBasket({ id }))
@@ -42,10 +46,7 @@ const CheckoutProduct = ({ id, title, price, rating, description, category, imag
                 </div>
                 <p className="text-xs my-2 line-clamp-2">{description}</p>
                 <div className="mb-5">
-                    <Currency
-                        quantity={price}
-                    // currency="INR"
-                    />
+                    <Currency quantity={price} />
                 </div>
                 {hasPrime && (
                     <div className="flex items-center space-x-2 -mt-5">
@@ -57,7 +58,8 @@ const CheckoutProduct = ({ id, title, price, rating, description, category, imag
 
             {/* Right side add/remove button */}
             <div className="flex flex-col space-y-2 my-auto justify-self-end">
-                <div className="button" onClick={addItemsToBasket}>Add to Basket</div>
+                {/* <div className="button" onClick={addItemsToBasket}>Add to Basket</div> */}
+                <QuantityCount dispatch setQuantity={setQuantity} quantity={quantity} id={id} />
                 <div className="button" onClick={removeItemsFromBasket}>Remove from Basket</div>
             </div>
         </div>
