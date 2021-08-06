@@ -27,7 +27,6 @@ function QuickView({ setShowQuick, id, products }) {
     useEffect(() => {
         const found = products.filter(product => product.id == id)[0]
         setProduct(found)
-        console.log(found)
     }, [id])
 
     return (
@@ -64,7 +63,7 @@ function QuickView({ setShowQuick, id, products }) {
                             </div>
                             <p className="text-yellow-500 text-2xl mb-7">
                                 <Currency
-                                    quantity={product?.price}
+                                    quantity={product?.price || 0}
                                 />
                             </p>
                             {product?.shipping && (

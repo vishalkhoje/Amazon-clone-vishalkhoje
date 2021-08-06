@@ -15,7 +15,7 @@ import QuickView from "./QuickView";
 
 const MAX_RATING = 5;
 const MIN_RATING = 1;
-const Product = ({ id, title, price, description, category, image, products }) => {
+const Product = ({ id, title, price, description, category, image, products, colors }) => {
     const dispatch = useDispatch();
     const [showQuick, setShowQuick] = useState(false);
     const [rating] = useState(Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1) + MIN_RATING))
@@ -34,9 +34,9 @@ const Product = ({ id, title, price, description, category, image, products }) =
                 <div className="relative flex flex-col m-5 bg-white p-10 z-30 rounded-xl">
                     <p className="absolute top-2 right-2 text-xs italic text-gray-400">{category}</p>
 
-                    <div className={`relative rounded-lg card-zoom `}>
+                    <div onClick={() => setShowQuick(true)} className={`relative rounded-lg card-zoom`}>
                         <Image className={"cursor-pointer rounded-lg overflow-hidden w-full card-zoom-image"} loading="lazy" src={image} width={800} height={500} objectFit="cover" />
-                        <div onClick={() => setShowQuick(true)} className={`flex rounded-lg cursor-pointer view-button absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}>
+                        <div className={`flex rounded-lg cursor-pointer view-button absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}>
                             <div className={`button rounded-lg flex items-center justify-center`}>
                                 <span>Quick View</span>
                                 <EyeIcon className="h-6" />
@@ -57,8 +57,12 @@ const Product = ({ id, title, price, description, category, image, products }) =
                     <div className="mb-5">
                         <Currency
                             quantity={price}
-                        // currency="INR"
                         />
+                    </div>
+                    <div className="flex items-center my-4">
+                        {colors && colors.map(color => (
+                            <div key={Math.random()} className={`w-7 h-7 border-gray-200 border-4 rounded-full mx-1`} style={{ background: color }} />
+                        ))}
                     </div>
                     {hasPrime && (
                         <div className="flex items-center space-x-2 -mt-5">
