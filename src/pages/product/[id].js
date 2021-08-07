@@ -28,7 +28,7 @@ function Details({ product, products }) {
     )
 
     const addItemToBasket = () => {
-        dispatch(addToBasket({ ...product, title: product.name, quantity }))
+        dispatch(addToBasket({ ...product, title: product.name, quantity, image: activeImage }))
         setShowCart(true)
         setAdded(true)
         setTimeout(() => setAdded(false), 2000)
