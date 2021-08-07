@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Header from "../components/Header"
 import { useSelector } from "react-redux";
-import { selectItems, selectedItemsTotal } from '../slices/basketSlice';
+import { selectItems, selectedItemsTotal, selectedItemsCount } from '../slices/basketSlice';
 import Currency from 'react-currency-formatter';
 import { useSession } from 'next-auth/client'
 import CheckoutProduct from "../components/CheckoutProduct";
@@ -13,7 +13,8 @@ const stripePromise = loadStripe(process.env.stripe_public_key);
 const Checkout = () => {
     const [session] = useSession();
     const selectedItem = useSelector(selectItems);
-    const total = useSelector(selectedItemsTotal);
+    const cartItemsCount = useSelector(selectedItemsCount)
+    const totalPrice = useSelector(selectedItemsTotal);
     // call the backend to create checkout session
     const createCheckoutSession = async () => {
         const stripe = await stripePromise;
@@ -31,7 +32,6 @@ const Checkout = () => {
         } catch (error) {
             console.error(error);
         }
-
     }
 
     return (
@@ -59,8 +59,8 @@ const Checkout = () => {
                 <div className="flex flex-col bg-white p-10">
                     {selectedItem.length > 0 && (
                         <>
-                            <h2 className="whitespace-nowrap">Subtotal ({selectedItem.length} items): {" "}
-                                <span><Currency quantity={total} /></span>
+                            <h2 className="whitespace-nowrap">Subtotal ({cartItemsCount} items): {" "}
+                                <span><Currency quantity={totalPrice} /></span>
                             </h2>
                             <button
                                 role="link"
