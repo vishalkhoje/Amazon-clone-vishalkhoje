@@ -3,12 +3,25 @@ import { SearchIcon, ShoppingCartIcon, MenuIcon } from '@heroicons/react/outline
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { useRouter } from 'next/router';
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import Link from "next/link";
 import { selectedItemsCount } from '../slices/basketSlice';
+import Currency from 'react-currency-formatter';
 
-const Header = () => {
+const Header = ({ products }) => {
     const [session] = useSession();
     const router = useRouter();
     const cartCount = useSelector(selectedItemsCount);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [showResults, setShowResults] = useState(false)
+
+    const handleSearch = e => {
+        let searchText = e.target.value
+        searchText = searchText.toLowerCase()
+        setSearchTerm(searchText)
+        setSearchResults(products?.filter(product => product.name.includes(searchText)))
+    }
 
     return (
         <header>
@@ -25,9 +38,41 @@ const Header = () => {
                     />
                 </div>
                 {/* search */}
-                <div className="hidden sm:flex items-center h-10 rounded-md flex-grow cursor-pointer bg-yellow-400 hover:bg-yellow-500 ">
-                    <input type="text" className="p-2 h-full w-6 items-center flex-grow flex-shrink rounded-l-md focus:outline-none px-4" />
+                <div className="hidden relative sm:flex items-center h-10 rounded-md flex-grow cursor-pointer bg-yellow-400 hover:bg-yellow-500 ">
+                    <input type="text" className="p-2 h-full w-6 items-center flex-grow flex-shrink rounded-l-md focus:outline-none px-4"
+                        placeholder="Search anything you need..."
+                        onChange={handleSearch}
+                        onMouseOver={() => setShowResults(true)}
+                        onBlur={() => setShowResults(false)}
+                        onFocus={() => setShowResults(true)} value={searchTerm} />
                     <SearchIcon className="h-12 p-4" />
+
+                    {showResults && (
+                        <div onClick={() => setShowResults(true)} onMouseOver={() => setShowResults(true)}
+                            onMouseLeave={() => setShowResults(false)}
+                            className="absolute w-full bg-white bottom-0 z-10 rounded-md h-auto max-h-400 translate-y-full overflow-auto"
+                        >
+
+                            {(!!searchResults?.length) ? searchResults.map(({ id, name, price, category }) => (
+                                <div key={Math.random()} className="p-2 mt-2 border-b-2 rounded-md border-gray-100 bg-gray-50">
+                                    <Link href={`/product/${id}`}>
+                                        <h5 className="font-medium text-sm text-gray-600">{name}</h5>
+                                    </Link>
+                                    <Link href={`/product/${id}`}>
+                                        <p className="text-xs text-gray-400">{category}
+                                            <Currency
+                                                quantity={price}
+                                            />
+                                        </p>
+                                    </Link>
+                                </div>
+                            )) : (
+                                <>
+                                    {searchTerm && <p className="text-xs text-gray-400 text-center py-2">No product found</p>}
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
                 {/* search */}
                 <div className="flex text-white mx-6 items-center text-xs space-x-6 whitespace-nowrap">
