@@ -5,12 +5,10 @@ import Currency from 'react-currency-formatter';
 import Fade from 'react-reveal/Fade';
 import { useDispatch } from 'react-redux';
 import { addToBasket } from "../slices/basketSlice";
-import { ToastContainer, toast } from 'react-toastify';
 import Link from 'next/link';
 import {
     EyeIcon,
 } from '@heroicons/react/outline'
-import 'react-toastify/dist/ReactToastify.css';
 import QuickView from "./QuickView";
 
 const MAX_RATING = 5;
@@ -25,7 +23,6 @@ const Product = ({ id, title, price, description, category, image, products, col
         const product = { id, title, price, rating, description, category, image, hasPrime, quantity: 1 };
 
         dispatch(addToBasket(product));
-        toast(`${title} added into basket.`, { closeOnClick: true, autoClose: 3000 });
     }
 
     return (
@@ -71,10 +68,6 @@ const Product = ({ id, title, price, description, category, image, products, col
                         </div>
                     )}
                     <button onClick={addItemsToBasket} className="button">Add to Basket</button>
-                    <ToastContainer
-                        autoClose={3000}
-                        closeOnClick
-                    />
                 </div>
             </Fade>
             {showQuick && <QuickView setShowQuick={setShowQuick} id={id} products={products} />}
