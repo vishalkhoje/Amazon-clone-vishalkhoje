@@ -23,6 +23,11 @@ const Header = ({ products }) => {
         setSearchResults(products?.filter(product => product.name.includes(searchText)))
     }
 
+    const handleSignIn = (e) => {
+        e.preventDefault()
+        signIn('google', { callbackUrl: `${window.location.host}` });
+      };
+
     return (
         <header>
             <div className="flex items-center bg-amazon_blue flex-grow p-1 py-2">
@@ -76,7 +81,7 @@ const Header = ({ products }) => {
                 </div>
                 {/* search */}
                 <div className="flex text-white mx-6 items-center text-xs space-x-6 whitespace-nowrap">
-                    <div onClick={!session ? signIn : signOut} className="link">
+                    <div onClick={!session ? handleSignIn : signOut} className="link">
                         <p>{session ? `Hello, ${session.user.name}` : 'Sign In'}</p>
                         <p className="font-extrabold md:text-sm">Account & Lists</p>
                     </div>
